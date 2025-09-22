@@ -1,0 +1,57 @@
+{"properties": [
+  {
+    "name": "security.auth.access-token-expire-seconds",
+    "type": "java.lang.Long",
+    "description": "アクセストークンの有効期限（秒）"
+  },
+  {
+    "name": "security.auth.refresh-token-expire-seconds",
+    "type": "java.lang.Long",
+    "description": "リフレッシュトークンの有効期限（秒）"
+  },
+  {
+    "name": "security.auth.jwt-secret",
+    "type": "java.lang.String",
+    "description": "jwtの署名に使用する秘密鍵"
+  },
+  {
+    "name": "security.auth.nonce-expire-seconds",
+    "type": "java.lang.Long",
+    "description": "一時saltの有効期限（秒）"
+  },
+  {
+    "name": "security.cors.allowed-origins",
+    "type": "java.lang.String",
+    "description": "認可オリジンリスト"
+  },
+  {
+    "name": "security.cors.allowed-methods",
+    "type": "java.lang.String",
+    "description": "認可メソッドリスト"
+  },
+  {
+    "name": "security.cors.allowed-headers",
+    "type": "java.lang.String",
+    "description": "認可ヘッダーリスト"
+  },
+  {
+    "name": "security.cors.allow-credentials",
+    "type": "java.lang.Boolean",
+    "description": "認証情報送信の許可"
+  },
+  {
+    "name": "spring.ai.openai.base-url",
+    "type": "java.lang.String",
+    "description": "OPENAIのAPIベースURL"
+  },
+  {
+    "name": "spring.ai.openai.api-key",
+    "type": "java.lang.String",
+    "description": "OPENAIのAPIキー"
+  },
+  {
+    "name": "spring.ai.openai.chat.options.model",
+    "type": "java.lang.String",
+    "description": "OPENAIのチャットモデル"
+  }
+]}
