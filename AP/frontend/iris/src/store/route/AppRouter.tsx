@@ -1,8 +1,8 @@
-import React, { JSX } from "react";
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { authSelector } from "../recoil/common/auth/authRecoil";
-import { IrisRoutes } from "./routes";
+import React, { JSX } from 'react';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { authSelector } from '../recoil/common/auth/authRecoil';
+import { IrisRoutes } from './routes';
 
 /**
  * 認証保護ルートコンポーネント
@@ -10,9 +10,9 @@ import { IrisRoutes } from "./routes";
  * @returns JSX.Element
  */
 function ProtectedRoute(): JSX.Element {
-    const { isAuthenticated } = useRecoilValue(authSelector);
-    return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
-};
+  const { isAuthenticated } = useRecoilValue(authSelector);
+  return isAuthenticated ? <Outlet /> : <Navigate to='/' replace />;
+}
 
 /** ログインフォーム */
 const LoginForm = React.lazy(() => import('../../parts/auth/LoginForm'));
@@ -25,15 +25,15 @@ const Home = React.lazy(() => import('../../parts/home/Home'));
  * @returns JSX.Element
  */
 export default function AppRouter(): JSX.Element {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<LoginForm />} />
-                <Route element={<ProtectedRoute />}>
-                    {/**要認証AP */}
-                    <Route path={IrisRoutes.AP_IRIS_HOME.path} element={<Home />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<LoginForm />} />
+        <Route element={<ProtectedRoute />}>
+          {/**要認証AP */}
+          <Route path={IrisRoutes.AP_IRIS_HOME.path} element={<Home />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }

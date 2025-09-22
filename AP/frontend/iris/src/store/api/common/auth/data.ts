@@ -2,26 +2,26 @@
 
 /** チャレンジレスポンス */
 export interface ChallengeResponse {
-    /** ソルト */
-    salt: string;
-    /** 一時ソルト */
-    nonce: string;
+  /** ソルト */
+  salt: string;
+  /** 一時ソルト */
+  nonce: string;
 }
 
 /** ログインレスポンス */
 export interface LoginResponse {
-    /** アクセスjwtトークン */
-    accessToken: string;
-    /** リフレッシュトークン */
-    refreshToken: string;
+  /** アクセスjwtトークン */
+  accessToken: string;
+  /** リフレッシュトークン */
+  refreshToken: string;
 }
 
 /** ログアウトレスポンス */
 export interface LogoutResponse {
-    /** ログアクト結果 */
-    resultCode: number;
-    /** メッセージ */
-    message: string;
+  /** ログアクト結果 */
+  resultCode: number;
+  /** メッセージ */
+  message: string;
 }
 
 // #endregion
