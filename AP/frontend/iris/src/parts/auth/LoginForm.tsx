@@ -13,8 +13,8 @@ import AppContainer from '../layout/AppContainer';
  */
 export default function LoginForm(): JSX.Element {
     const [loading, setLoading] = useState(false);
-    const [host, setHost] = useState('');
-    const [port, setPort] = useState('');
+    const [host, setHost] = useState('http://localhost');
+    const [port, setPort] = useState('8080');
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
