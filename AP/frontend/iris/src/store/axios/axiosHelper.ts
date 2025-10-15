@@ -147,6 +147,18 @@ class AxiosHelper {
    * - レスポンスインターセプタ: data を返しつつ 401 をキャッチしてリフレッシュ→リトライを行う
    */
   private setInterceptors() {
+    // Request Interceptor: 認証情報をリクエストヘッダーに追加する。
+    this.instance.interceptors.request.use(
+      (config) => {
+        const token = this.options.tokenStorage.getAccessToken();
+        if (token) {
+          config.headers.set('Authorization', `Bearer ${token}`);
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
     // Response interceptor: 成功時は response.data を返す
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => {
