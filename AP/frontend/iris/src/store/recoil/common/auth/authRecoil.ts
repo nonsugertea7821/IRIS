@@ -17,8 +17,6 @@ interface LoginState {
 
 /** 認証機能インターフェース */
 interface Auth {
-  /** クライアント識別子 */
-  userId?: string;
   /** 認証状態 */
   isAuthenticated: boolean;
   /**
@@ -40,8 +38,6 @@ interface Auth {
 const loginState = atom<LoginState>({
   key: AtomKeys.IRIS_AUTH_LOGIN_STATE,
   default: {
-    userName: undefined,
-    userId: undefined,
     isAuthenticated: false,
   },
 });
@@ -50,7 +46,6 @@ const loginState = atom<LoginState>({
 export const authSelector = selector<Auth>({
   key: SelectorKeys.IRIS_AUTH_INTERFACE_SELECTOR,
   get: ({ get, getCallback }) => {
-    const userId = get(loginState).userId;
     const isAuthenticated = get(loginState).isAuthenticated;
 
     /** ログイン処理 */
@@ -93,6 +88,6 @@ export const authSelector = selector<Auth>({
       }
     });
 
-    return { userId, isAuthenticated, login, logout };
+    return { isAuthenticated, login, logout };
   },
 });
