@@ -1,10 +1,10 @@
+import AppContainer from '@/parts/AppContainer/AppContainer';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { ChangeEvent, JSX, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { authSelector } from '../../store/recoil/common/auth/authRecoil';
-import { IrisRoutes } from '../../store/route/routes';
-import AppContainer from '../layout/AppContainer';
+import { authSelector } from '../../../store/recoil/common/auth/authRecoil';
+import { IrisRoutes } from '../../../store/route/routes';
 
 /**
  * ログインフォームコンポーネント
@@ -46,9 +46,9 @@ export default function LoginForm(): JSX.Element {
         url = host + ':' + port;
       }
       await login(url, userName, password);
+      navigate(IrisRoutes.AP_IRIS_HOME.path);
     } finally {
       setLoading(false);
-      navigate(IrisRoutes.AP_IRIS_HOME.path);
     }
   }, [host, port, login, userName, password, navigate]);
 

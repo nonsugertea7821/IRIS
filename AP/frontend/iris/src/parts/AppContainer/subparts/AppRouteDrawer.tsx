@@ -1,6 +1,6 @@
 import { Drawer, List, ListItemButton, ListItemText } from '@mui/material';
 import React, { JSX, useMemo } from 'react';
-import { IrisRoutes } from '../../store/route/routes';
+import { useNavigate } from 'react-router-dom';
 import { HEADER_HEIGHT } from './AppHeader';
 
 /**
@@ -15,14 +15,12 @@ interface AppRouteDrawerProps {
   open: boolean;
   /** ドロワー閉じる関数 */
   onClose?: () => void;
-  /** メニュー選択関数 */
-  onSelect?: (apKey: string) => void;
 }
 
 /**
  * ドロワーに表示するルートリスト
  */
-const AP_ROUTES_DRAWER_LIST = [IrisRoutes.AP_SERVER_MANAGEMENT];
+const AP_ROUTES_DRAWER_LIST: { path: string; label: string }[] = [];
 
 /**
  * アプリケーションのルートドロワーコンポーネント
@@ -30,13 +28,10 @@ const AP_ROUTES_DRAWER_LIST = [IrisRoutes.AP_SERVER_MANAGEMENT];
  * @param param0 - アプリケーションのルートドロワーコンポーネント引数
  * @returns JSX.Element
  */
-export default function AppRouteDrawer({ open, onClose, onSelect }: AppRouteDrawerProps) {
+export default function AppRouteDrawer({ open, onClose }: AppRouteDrawerProps) {
   const menuItems = useMemo(
-    () =>
-      AP_ROUTES_DRAWER_LIST.map((menu) => (
-        <DrawerItem key={menu.path} path={menu.path} label={menu.label} onSelect={onSelect} />
-      )),
-    [onSelect]
+    () => AP_ROUTES_DRAWER_LIST.map((menu) => <DrawerItem key={menu.path} path={menu.path} label={menu.label} />),
+    []
   );
 
   return (
@@ -44,12 +39,6 @@ export default function AppRouteDrawer({ open, onClose, onSelect }: AppRouteDraw
       anchor='left'
       open={open}
       onClose={onClose}
-      ModalProps={useMemo(
-        () => ({
-          keepMounted: true, // モバイルでのパフォーマンス向上
-        }),
-        []
-      )}
       variant='temporary'
       sx={useMemo(
         () => ({
@@ -57,7 +46,7 @@ export default function AppRouteDrawer({ open, onClose, onSelect }: AppRouteDraw
             boxSizing: 'border-box',
             width: 240,
             top: HEADER_HEIGHT,
-            height: `calc(100 - ${HEADER_HEIGHT})`, // ヘッダーの高さ分だけ高さを縮める
+            height: `calc(100 - ${HEADER_HEIGHT})`,
           },
         }),
         []
@@ -76,10 +65,12 @@ type DrawerItemProps = {
 };
 
 /** ドロワーアイテム */
-function DrawerItem({ path, label, onSelect }: DrawerItemProps): JSX.Element {
+function DrawerItem({ path, label }: DrawerItemProps): JSX.Element {
+  const navigate = useNavigate();
+
   const handleClick = React.useCallback(() => {
-    onSelect?.(path);
-  }, [onSelect, path]);
+    navigate(path);
+  }, [navigate, path]);
 
   return (
     <ListItemButton onClick={handleClick}>

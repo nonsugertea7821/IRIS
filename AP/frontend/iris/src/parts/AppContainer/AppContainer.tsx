@@ -1,6 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import React, { JSX, useMemo } from 'react';
-import AppHeader, { HEADER_HEIGHT } from './AppHeader';
+import AppHeader, { HEADER_HEIGHT } from './subparts/AppHeader';
 
 /**
  * アプリケーションのコンテナコンポーネント引数

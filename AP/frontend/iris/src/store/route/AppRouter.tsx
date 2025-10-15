@@ -15,9 +15,9 @@ function ProtectedRoute(): JSX.Element {
 }
 
 /** ログインフォーム */
-const LoginForm = React.lazy(() => import('../../parts/auth/LoginForm'));
+const LoginForm = React.lazy(() => import('../../apps/common/auth/LoginForm'));
 /** ホーム */
-const Home = React.lazy(() => import('../../parts/home/Home'));
+const Home = React.lazy(() => import('../../apps/common/home/Home'));
 
 /**
  * アプリルーターコンポーネント

@@ -1,8 +1,8 @@
+import { authSelector } from '@/store/recoil/common/auth/authRecoil';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, IconButton, styled, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { authSelector } from '../../store/recoil/common/auth/authRecoil';
 import AppRouteDrawer from './AppRouteDrawer';
 
 export const HEADER_HEIGHT = 64;
@@ -22,19 +22,24 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   minHeight: HEADER_HEIGHT,
   height: HEADER_HEIGHT,
-  px: theme.spacing(2),
+  px: theme.spacing(1),
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
 }));
 
 /**
  * スタイリングされたタイトルTypographyコンポーネント
  */
-const TitleTypography = styled(Typography)({
+const TitleTypography = styled(Typography)(({ theme }) => ({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
+  marginLeft: theme.spacing(1),
   m: 0,
   p: 0,
-});
+}));
 
 /**
  * アプリケーションヘッダーコンポーネント
@@ -57,9 +62,9 @@ export default function AppHeader() {
       <StyledAppBar>
         <StyledToolBar disableGutters>
           {isAuthenticated && (
-            <IconButton edge='start' color='inherit' onClick={handleMenuToggle}>
+            <StyledIconButton edge='start' color='inherit' onClick={handleMenuToggle}>
               <MenuIcon />
-            </IconButton>
+            </StyledIconButton>
           )}
           <TitleTypography variant='h6'>IRIS Ver.0.1.0</TitleTypography>
         </StyledToolBar>

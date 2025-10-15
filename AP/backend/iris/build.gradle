@@ -59,7 +59,6 @@ bootRun {
     sourceResources sourceSets.main
 }
 
-
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-parameters'
 }
