@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
  * 認証/ユーザ情報
  *
  * @author nonsugertea7821
- * @version 0.1.0
+ * @version 0.1.1
  * @since 2025-09-14
  */
 @Data
@@ -32,7 +32,7 @@ public class User {
      * 権限
      */
     @JsonIgnore
-    private final Role Role;
+    private final String role;
 
     /**
      * パスワードハッシュ
@@ -44,6 +44,6 @@ public class User {
      * ソルト
      */
     @JsonIgnore
-    private String salt;
+    private final String salt;
 
 }
