@@ -1,9 +1,12 @@
 package com.github.nonsugertea7821.iris.src.common.auth.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -21,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  * 認証/リクエストフィルター機能
  *
  * @author nonsugertea7821
- * @version 0.1.0
+ * @version 0.1.1
  * @since 2025/08/16
  */
 @Component
@@ -46,11 +49,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // トークン検証
                 if (jwtProcessor.validateAccessToken(token)) {
                     User user = jwtProcessor.getUserFromAccessToken(token);
+                    var authority = new SimpleGrantedAuthority(user.getRole());
+                    var authorities = new ArrayList<GrantedAuthority>();
+                    authorities.add(authority);
+
                     // Spring Security にセット
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             user,
                             null,
-                            user.getRole().toAuthorities()
+                            authorities
                     );
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
