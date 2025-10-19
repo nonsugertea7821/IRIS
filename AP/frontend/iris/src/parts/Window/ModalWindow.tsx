@@ -1,22 +1,42 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, IconButton, Modal, styled, SxProps, Typography } from '@mui/material';
+import { Box, IconButton, Modal, Typography, styled, useTheme } from '@mui/material';
 import React, { JSX, useCallback, useMemo } from 'react';
 
+/**
+ * ModalWindowコンポーネントのプロパティ定義
+ */
 interface ModalWindowProps {
+  /** モーダルの開閉状態 */
   isOpen: boolean;
+  /** 閉じるイベントハンドラ */
   onClose?: () => void;
+  /** モーダルヘッダーのタイトル */
   title?: string;
+  /** モーダル内部に表示する子要素 */
   children: React.ReactNode;
+  /** 幅（デフォルト: 75%） */
   width?: number | string;
+  /** 高さ（デフォルト: auto） */
   height?: number | string;
+  /** 最大幅（デフォルト: 90vw） */
   maxWidth?: number | string;
+  /** 最大高さ（デフォルト: 90vh） */
   maxHeight?: number | string;
+  /** ヘッダー右上に閉じるボタンを表示するか */
   closable?: boolean;
+  /** 背景クリックで閉じるか */
   backdropClosable?: boolean;
-  sx?: SxProps;
+  /** コンポーネント識別用ID */
   id?: string;
+  /** ヘッダー背景色（指定時はテーマを上書き） */
+  headerColor?: string;
+  /** ヘッダーテキスト色（指定時はテーマを上書き） */
+  headerTextColor?: string;
 }
 
+/**
+ * 汎用モーダルウィンドウコンポーネント
+ */
 export const ModalWindow = (props: ModalWindowProps): JSX.Element => {
   const {
     isOpen,
@@ -27,51 +47,67 @@ export const ModalWindow = (props: ModalWindowProps): JSX.Element => {
     height = 'auto',
     maxWidth = '90vw',
     maxHeight = '90vh',
-    backdropClosable,
-    closable,
-    sx,
+    backdropClosable = false,
+    closable = true,
     id,
+    headerColor,
+    headerTextColor,
   } = props;
 
+  const theme = useTheme();
+
   /**
-   * 画面クローズ処理
+   * モーダルを閉じる処理。
+   * onCloseが未定義の場合は何もしない。
    */
   const handleClose = useCallback(() => {
-    if (onClose) {
-      onClose();
-    }
+    if (onClose) onClose();
   }, [onClose]);
+
+  /**
+   * フレームサイズのスタイルをメモ化。
+   * width, height, maxWidth, maxHeightが変更された場合のみ再計算される。
+   */
+  const frameStyle = useMemo(
+    () => ({
+      width,
+      height,
+      maxWidth,
+      maxHeight,
+    }),
+    [width, height, maxWidth, maxHeight]
+  );
+
+  /**
+   * ヘッダー背景色とテキスト色をメモ化。
+   * headerColor/headerTextColor が指定されない場合はテーマの色を使用。
+   */
+  const headerStyle = useMemo(
+    () => ({
+      backgroundColor: headerColor ?? theme.palette.primary.main,
+      color: headerTextColor ?? theme.palette.primary.contrastText,
+    }),
+    [headerColor, headerTextColor, theme.palette.primary.main, theme.palette.primary.contrastText]
+  );
 
   return (
     <Modal
-      {...props}
       open={isOpen}
       onClose={backdropClosable ? handleClose : undefined}
       aria-labelledby={id ? `${id}-title` : undefined}
       aria-describedby={id ? `${id}-description` : undefined}
     >
-      <Frame
-        sx={useMemo(
-          () => ({
-            width,
-            height,
-            maxWidth,
-            maxHeight,
-            ...sx,
-          }),
-          [height, maxHeight, maxWidth, sx, width]
-        )}
-      >
-        {(closable ?? true) && (
-          <Header>
-            {(title ?? true) && (
-              <HeaderTypography id={id ? `${id}-title` : undefined}>{title ?? 'Modal'}</HeaderTypography>
+      <Frame style={frameStyle}>
+        {closable && (
+          <Header style={headerStyle}>
+            {title && (
+              <HeaderTypography id={id ? `${id}-title` : undefined} style={headerStyle}>
+                {title}
+              </HeaderTypography>
             )}
-            {(closable ?? true) && (
-              <IconButton onClick={handleClose}>
-                <HeaderCloseIcon />
-              </IconButton>
-            )}
+            <IconButton onClick={handleClose}>
+              <HeaderCloseIcon style={headerStyle} aria-label='close' />
+            </IconButton>
           </Header>
         )}
         <Content id={id ? `${id}-description` : undefined}>{children}</Content>
@@ -80,6 +116,14 @@ export const ModalWindow = (props: ModalWindowProps): JSX.Element => {
   );
 };
 
+// ==========================
+// styled components
+// ==========================
+
+/**
+ * モーダル全体のフレーム
+ * 中央配置・角丸・影付きで内容を囲む
+ */
 const Frame = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -87,38 +131,48 @@ const Frame = styled(Box)(({ theme }) => ({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  bgcolor: theme.palette.background.paper,
-  borderRadius: 2,
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: theme.shape.borderRadius,
   boxShadow: theme.shadows[5],
-  width: '75%',
-  maxWidth: '90vw',
-  maxHeight: '90vh',
-  p: 4,
   overflow: 'hidden',
 }));
 
-const Header = styled(Box)(({ theme }) => ({
+/**
+ * モーダルヘッダー
+ * 左にタイトル、右に閉じるボタンを配置
+ */
+const Header = styled(Box)({
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: theme.spacing(1.5, 2),
-  borderBottom: `1px solid ${theme.palette.divider}`,
-  backgroundColor: theme.palette.primary.main,
-}));
+  height: '2rem',
+  padding: '8px 16px',
+  borderBottom: '1px solid rgba(0,0,0,0.12)',
+});
 
-const HeaderTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.contrastText,
-}));
+/**
+ * ヘッダー内タイトルテキスト
+ */
+const HeaderTypography = styled(Typography)({
+  fontWeight: 600,
+  fontSize: '1rem',
+});
 
-const HeaderCloseIcon = styled(CloseIcon)(({ theme }) => ({
-  position: 'absolute',
-  color: theme.palette.primary.contrastText,
-}));
+/**
+ * ヘッダー右上の閉じるアイコン
+ */
+const HeaderCloseIcon = styled(CloseIcon)({
+  position: 'relative',
+});
 
+/**
+ * モーダルコンテンツ領域
+ * 高さに応じてスクロール可能
+ */
 const Content = styled(Box)(({ theme }) => ({
   flex: 1,
   overflowY: 'auto',
-  padding: theme.spacing(2),
+  padding: theme.spacing(2.5),
   backgroundColor: theme.palette.background.paper,
 }));

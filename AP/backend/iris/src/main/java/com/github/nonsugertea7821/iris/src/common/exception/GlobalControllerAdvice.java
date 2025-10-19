@@ -12,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import jakarta.security.auth.message.AuthException;
+
 /**
  * 共通/例外処理機構
  *
@@ -51,7 +53,7 @@ public class GlobalControllerAdvice {
     }
 
     /**
-     * 権限・認証の不正
+     * 権限の不正
      *
      * @param ex {@link AccessDeniedException}
      * @return {@link HttpStatus#FORBIDDEN}
@@ -60,6 +62,18 @@ public class GlobalControllerAdvice {
     public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
         Map<String, Object> body = createBody(HttpStatus.FORBIDDEN, "Forbidden", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+    }
+
+    /**
+     * 認証の不正
+     *
+     * @param ex {@link AuthException}
+     * @return {@link HttpStatus#UNAUTHORIZED}
+     */
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorized(AuthException ex) {
+        Map<String, Object> body = createBody(HttpStatus.UNAUTHORIZED, "Unauthorized", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
     /**
