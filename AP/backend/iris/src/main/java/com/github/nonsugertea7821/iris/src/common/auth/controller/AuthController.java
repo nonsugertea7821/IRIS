@@ -3,8 +3,6 @@ package com.github.nonsugertea7821.iris.src.common.auth.controller;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,39 +38,27 @@ public class AuthController {
     }
 
     @GetMapping("/get-challenge")
-    public ResponseEntity<ChallengeResponse> getChallenge(@RequestParam UUID userId) {
-        try {
-            ChallengeResponse challenge = service.getChallenge(userId);
-            return ResponseEntity.ok(challenge);
-        } catch (AuthException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    public ChallengeResponse getChallenge(@RequestParam UUID userId) throws AuthException {
+        ChallengeResponse challenge = service.getChallenge(userId);
+        return challenge;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody AuthRequest req) {
-        try {
-            LoginResponse token = service.authenticate(req.getUserId(), req.getPasswordHash());
-            return ResponseEntity.ok(token);
-        } catch (AuthException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    public LoginResponse login(@RequestBody AuthRequest req) throws AuthException {
+        LoginResponse token = service.authenticate(req.getUserId(), req.getPasswordHash());
+        return token;
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody Map<String, String> req) {
-        try {
-            String refreshToken = req.get("refreshToken");
-            LoginResponse newTokens = service.refresh(refreshToken);
-            return ResponseEntity.ok(newTokens);
-        } catch (AuthException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+    public LoginResponse refresh(@RequestBody Map<String, String> req) throws AuthException {
+        String refreshToken = req.get("refreshToken");
+        LoginResponse newTokens = service.refresh(refreshToken);
+        return newTokens;
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, Object>> logout(@RequestBody Map<String, String> req) {
+    public Map<String, Object> logout(@RequestBody Map<String, String> req) {
         service.logout(req.get("refreshToken"));
-        return ResponseEntity.ok(Map.of("resultCode", 0, "message", "ログアウト成功"));
+        return Map.of("resultCode", 0, "message", "ログアウト成功");
     }
 }

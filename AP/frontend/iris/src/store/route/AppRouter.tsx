@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { authSelector } from '../recoil/common/auth/authRecoil';
 import { IrisRoutes } from './routes';
@@ -28,15 +28,13 @@ const SQAS = React.lazy(() => import('../../apps/qas/sqas/SQAS'));
  */
 export default function AppRouter(): JSX.Element {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<LoginForm />} />
-        <Route element={<ProtectedRoute />}>
-          {/**要認証AP */}
-          <Route path={IrisRoutes.AP_IRIS_HOME.path} element={<Home />} />
+    <Routes>
+      <Route path='/' element={<LoginForm />} />
+      <Route element={<ProtectedRoute />}>
+        {/**要認証AP */}
+        <Route path={IrisRoutes.AP_IRIS_HOME.path} element={<Home />} />
           <Route path={IrisRoutes.AP_IRIS_SQAS.path} element={<SQAS />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      </Route>
+    </Routes>
   );
 }

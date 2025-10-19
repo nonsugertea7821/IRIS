@@ -169,14 +169,12 @@ class AxiosHelper {
         // エラー処理：401 の場合はリフレッシュを試みてオリジナルリクエストを再試行する
         const originalConfig = (error.config || {}) as InternalAxiosRequestConfig;
         const status = error.response?.status;
-
-        // 特に注意：ここで this.handleTokenRefresh を呼ぶ場合、
-        // 同期的に複数のリクエストが 401 を返すと重複でリフレッシュ要求が走るため
-        // isRefreshing + queue で排他制御している。
-        if (status === 401 && !originalConfig._retry) {
+        // ただし、認証系APIの401はリトライしない。
+        const authUrls = Object.values(IrisAuthUrl) as string[];
+        const isAuthRequest = authUrls.includes(originalConfig.url!);
+        if (status === 401 && !originalConfig._retry && !isAuthRequest) {
           // マークして無限ループを防ぐ
           originalConfig._retry = true;
-
           try {
             // リフレッシュが成功したら元のリクエストを再試行
             await this.handleTokenRefresh();
@@ -209,20 +207,17 @@ class AxiosHelper {
         this.refreshQueue.push(resolve);
       });
     }
-
     this.isRefreshing = true;
-
     try {
       const refreshToken = this.options.tokenStorage.getRefreshToken();
       if (!refreshToken) {
         throw new Error('No refresh token available');
       }
-
       // 既定の動作: options.refreshHandler があればそれを使う。
       // なければ baseURL + refreshEndpoint に対して axios を直接叩く。
-      // ここで axios インスタンスを使わない理由:
+      // ここではaxiosインスタンスは使えない:
       // - this.instance のレスポンスインターセプタが再度 401 を拾って
-      //   再帰的に handleTokenRefresh を呼ぶことを避けるため。
+      //   再帰的に handleTokenRefresh が呼ばれるため。
       let newTokens: { accessToken: string; refreshToken?: string } | null = null;
 
       if (this.options.refreshHandler) {
@@ -236,7 +231,6 @@ class AxiosHelper {
           ? this.options.refreshEndpoint
           : `/${this.options.refreshEndpoint}`;
         const url = `${base}${endpoint}`;
-
         // axios を直接使うことで this.instance のインターセプタをバイパスする
         const resp = await axios.post(url, { refreshToken });
         // resp.data は通常 { accessToken, refreshToken? } を期待
