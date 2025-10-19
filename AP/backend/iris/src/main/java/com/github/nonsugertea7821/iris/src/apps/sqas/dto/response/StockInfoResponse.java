@@ -11,8 +11,13 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class StockInfoResponse {
-    /** データ識別子 */
+
+    /**
+     * データ識別子
+     */
     private final UUID key;
-    /** データ */
-    private final List<StockInfo> data;    
+    /**
+     * データ
+     */
+    private final List<StockInfo> data;
 }

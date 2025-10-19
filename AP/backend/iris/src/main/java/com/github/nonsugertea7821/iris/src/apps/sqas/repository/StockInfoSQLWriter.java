@@ -52,21 +52,23 @@ public final class StockInfoSQLWriter {
         }
 
         // MERGE文生成
-        return String.format("""
-                             MERGE INTO %s AS target
-                             USING (VALUES (%s)) AS source(%s)
-                             ON target.ticker = source.ticker AND DATE(target.extract_date) = DATE(source.extract_date)
-                             WHEN MATCHED THEN
-                                 UPDATE SET %s
-                             WHEN NOT MATCHED THEN
-                                 INSERT (%s)
-                                 VALUES (%s);""",
-                TABLE_NAME,
-                String.join(", ", paramNames),                 // source VALUES
-                String.join(", ", dbColumns),                  // source列名（DB列名）
-                updateList,                                    // UPDATE句
-                String.join(", ", dbColumns),                  // INSERT列名
-                String.join(", ", paramNames)                  // INSERT VALUES
+        return String.format(
+        """
+            MERGE INTO %s AS target
+            USING (VALUES (%s)) AS source(%s)
+            ON target.ticker = source.ticker AND DATE(target.extract_date) = DATE(source.extract_date)
+            WHEN MATCHED THEN
+            UPDATE SET %s
+            WHEN NOT MATCHED THEN
+            INSERT (%s)
+            VALUES (%s);
+        """,
+        TABLE_NAME,
+        String.join(", ", paramNames), // source VALUES
+        String.join(", ", dbColumns), // source列名（DB列名）
+        updateList, // UPDATE句
+        String.join(", ", dbColumns), // INSERT列名
+        String.join(", ", paramNames) // INSERT VALUES
         );
     }
 

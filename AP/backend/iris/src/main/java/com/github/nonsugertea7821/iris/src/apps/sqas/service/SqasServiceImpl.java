@@ -33,7 +33,7 @@ public class SqasServiceImpl extends ServiceBase implements SqasService {
     private final CacheStore<List<StockInfo>> parsedStockInfoCache = new CacheStore<>(CACHE_TTL);
 
     @Override
-    public StockInfoResponse parseStockScreenerCsv(MultipartFile file, Date extractDate,Locale extractLocale) {
+    public StockInfoResponse parseStockScreenerCsv(MultipartFile file, Date extractDate, Locale extractLocale) {
         try (var reader = new BufferedReader(new InputStreamReader(
                 new BOMInputStream.Builder().setInputStream(file.getInputStream()).get(),
                 StandardCharsets.UTF_8))) {
@@ -49,7 +49,7 @@ public class SqasServiceImpl extends ServiceBase implements SqasService {
     @Override
     public void putStockInfo(UUID dataKey) throws Exception {
         List<StockInfo> entry = parsedStockInfoCache.fetch(dataKey, true);
-        if(entry == null || entry.isEmpty()){
+        if (entry == null || entry.isEmpty()) {
             throw new Exception("キャッシュが失効しました。もう一度CSVを入力してください。");
         }
         stockInfoRepository.save(entry);

@@ -11,7 +11,9 @@ import com.github.nonsugertea7821.iris.src.common.anotations.Column;
 import lombok.Data;
 
 /**
- * SQAS/株式情報 <p> 株価・財務・市場情報を包括的にまとめたデータ構造
+ * SQAS/株式情報
+ * <p>
+ * 株価・財務・市場情報を包括的にまとめたデータ構造
  *
  * @author nonsugertea7821
  * @since 2025/09/21

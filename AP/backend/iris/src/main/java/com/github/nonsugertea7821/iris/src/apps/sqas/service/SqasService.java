@@ -26,7 +26,7 @@ public interface SqasService {
      * @param extractLocale 情報源のロケール
      * @return 株式情報
      */
-    StockInfoResponse parseStockScreenerCsv(MultipartFile file,Date extractDate,Locale extractLocale);
+    StockInfoResponse parseStockScreenerCsv(MultipartFile file, Date extractDate, Locale extractLocale);
 
     /**
      * 株式情報をユーザー毎のテーブルに登録します。
