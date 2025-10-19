@@ -10,4 +10,6 @@ export const IrisAuthUrl = {
 export const IrisUrl = {
   ...IrisAuthUrl,
   IRIS_API_POST_LOGOUT: '/api/auth/logout',
+  IRIS_API_POST_SQAS_PARSE_STOCK_SCREENER_CSV: '/api/sqas/parse-stock-screener-csv',
+  IRIS_API_PUT_SQAS_PUT_STOCK_INFO: '/api/sqas/put-stock-info',
 } as const;

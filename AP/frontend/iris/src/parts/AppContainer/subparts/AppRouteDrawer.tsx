@@ -1,3 +1,4 @@
+import { IrisRoutes } from '@/store/route/routes';
 import { Drawer, List, ListItemButton, ListItemText } from '@mui/material';
 import React, { JSX, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,9 @@ interface AppRouteDrawerProps {
 /**
  * ドロワーに表示するルートリスト
  */
-const AP_ROUTES_DRAWER_LIST: { path: string; label: string }[] = [];
+const AP_ROUTES_DRAWER_LIST: { path: string; label: string }[] = [
+  IrisRoutes.AP_IRIS_SQAS
+];
 
 /**
  * アプリケーションのルートドロワーコンポーネント
