@@ -18,6 +18,8 @@ function ProtectedRoute(): JSX.Element {
 const LoginForm = React.lazy(() => import('../../apps/common/auth/LoginForm'));
 /** ホーム */
 const Home = React.lazy(() => import('../../apps/common/home/Home'));
+/** SQAS */
+const SQAS = React.lazy(() => import('../../apps/qas/sqas/SQAS'));
 
 /**
  * アプリルーターコンポーネント
@@ -32,6 +34,7 @@ export default function AppRouter(): JSX.Element {
         <Route element={<ProtectedRoute />}>
           {/**要認証AP */}
           <Route path={IrisRoutes.AP_IRIS_HOME.path} element={<Home />} />
+          <Route path={IrisRoutes.AP_IRIS_SQAS.path} element={<SQAS />} />
         </Route>
       </Routes>
     </BrowserRouter>
